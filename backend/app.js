@@ -11,7 +11,9 @@ const { PORT } = process.env;
 
 app.use(express.json());
 
-app.use("/api/v1/pets", require("./routes/pet.route"));
+app.use("/api/v1/", require("./routes/officer.route"));
+
+app.use("/api/v1/", require("./routes/consultation.route"));
 
 
 
