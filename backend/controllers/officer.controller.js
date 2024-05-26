@@ -73,8 +73,10 @@ const loginOfficer = async (req, res) => {
 };
 
 const getSingleUser = async (req, res) => {
+  console.log(req.body.officerId)
   try{
-    const officer = await Officer.findById(req.params.id)
+    const officer = await Officer.findById(req.body.officerId)
+                    .populate("consultationField")
 
     res.status(200).json({data:officer});
 

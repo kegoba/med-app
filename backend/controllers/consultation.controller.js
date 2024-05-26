@@ -1,22 +1,24 @@
 const mongoose = require("mongoose");
 const Consultation = require('../models/consultation.model');
-const consultation = require("../models/consultation.model");
+const officer = require('../models/officer.model');
+
 
 
 
 const createPatientConsultation =  async (req, res) => {
-    //console.log(req.body.officer)
+    console.log("hi",req.body.officerId)//officerId
     try {
         const consultation = new Consultation({
             patient: req.body.patient,
-            officer: req.body.officerId,
+            officerId: req.body.officerId, //officerId
             date: req.body.date,
             consultationType: req.body.consultationType,
             medicalCondition: req.body.medicalCondition,
             notes: req.body.notes,
         });
-        await consultation.save();
-        res.status(200).json({consultation: consultation});
+        const  data = await consultation.save();
+        console.log(data.officerId)
+        res.status(200).json({consultation: data});
 
     } catch(error){
         res.status(400).json({message: error.errors})
@@ -29,13 +31,12 @@ const createPatientConsultation =  async (req, res) => {
 
 const getAllPatientConsultation = async (req, res) => {
   const consultations = await Consultation.find()
-    .populate('Officer');
   res.send(consultations);
 };
 
 const getSinglePatientConsultation = async (req, res) => {
   const consultation = await Consultation.findById(req.params.id)
-    .populate('Officer');
+    .populate('officerId');
   if (!consultation) {
     return res.status(404).send('Consultation not found');
   }
@@ -57,16 +58,10 @@ const filterConsultation = async (req, res) => {
     
         const officerId = req.body.officerId;
           console.log(officerId)
-        // Validate ObjectId
-        if (!mongoose.Types.ObjectId.isValid("665212bc3f941205b9acab56")) {
-          return res.status(400).json({ message: 'Invalid officer ID format' });
-        }
     
-        const consultations = await Consultation.find({ Officer: officerId }).populate('Officer');
+        const consultations = await Consultation.findOne({officerId: officerId}).populate("officerId");
         console.log(consultations)
-        if (consultations.length === 0) {
-          return res.status(404).json({ message: 'No consultations found for this officer.' });
-        }
+
     
         res.json(consultations);
     

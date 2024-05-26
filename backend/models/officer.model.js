@@ -1,8 +1,8 @@
 
-
 const mongoose = require("mongoose");
 
-const Officer = mongoose.model("Officer", new mongoose.Schema({
+
+const OfficerSchema = mongoose.Schema({
   _id: {type : mongoose.Schema.Types.ObjectId},
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -10,9 +10,10 @@ const Officer = mongoose.model("Officer", new mongoose.Schema({
   phone: { type: String },
   password: { type: String, required: true },
   isStaff: { type: Boolean, default: false },
-}));
+});
 
 
+const Officer = mongoose.model('Officer', OfficerSchema);
 
 module.exports = Officer;
 
