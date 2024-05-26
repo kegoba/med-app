@@ -1,12 +1,15 @@
 
 const mongoose = require("mongoose");
 
-const  consultation = mongoose.model("consultation", {
+const Consultation = mongoose.model("Consultation", new mongoose.Schema({
   medicalCondition: { type: String, required: true },
   notes: { type: String, required: true },
   date: { type: String },
-  consultationType : { type: String, required: true },
-  officer: { type: mongoose.Schema.Types.ObjectId, ref: 'Officer' },
-});
+  consultationType: { type: String, required: true },
+  Officer: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Officer' 
+}],
+}));
 
-module.exports = consultation;
+module.exports = Consultation;

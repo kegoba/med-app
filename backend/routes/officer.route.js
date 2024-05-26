@@ -7,9 +7,10 @@ const officerController = require('../controllers/officer.controller')
 
 
 
-
-route.post('/addofficer', officerController.registerOfficer)
-route.post('/loginofficer', officerController.loginOfficer)  
+route.post('/registeruser', officerController.registerOfficer)
+route.post('/loginuser', officerController.loginOfficer) 
+route.get('/getalluser', officerController.getAllUser) 
+route.get('/getsingleuser', officerController.getSingleUser)  
 
 
 
