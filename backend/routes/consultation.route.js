@@ -8,11 +8,24 @@ const consultationController = require('../controllers/consultation.controller')
 
 
 
-route.post('/createconsultation', authenticate, consultationController.createPatientConsultation)
-route.get('/getallconsultation', authenticate, consultationController.getAllPatientConsultation)
-route.delete('/filterconsultation', authenticate, consultationController.filterConsultation)
-route.get('/getsingleconsultation/:id', authenticate, consultationController.getSinglePatientConsultation) //getConsulationByOfficerId  
-route.get('/getofficerconsultation', authenticate, consultationController.getConsulationByOfficerId)   
+route.post('/createconsultation', 
+            authenticate, 
+            consultationController.createConsultation
+        )
+
+route.get('/getalluserconsultation', 
+           // authenticate, 
+            consultationController.getAllUserAndConsultation)
+
+
+route.delete('/deletealluserconsultation', 
+                authenticate, 
+                consultationController.deleteAllConsultation)
+
+
+route.get('/getsingleconsulation'
+                    , 
+                    consultationController.getSinglePatientConsultation)   
 
 
 

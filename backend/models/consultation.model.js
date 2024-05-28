@@ -2,12 +2,12 @@
 const mongoose = require("mongoose");
 
 const ConsultationSchema = mongoose.Schema({
-  medicalCondition: { type: String, required: true },
+  //medicalCondition: { type: String, required: true },
   notes: { type: String, required: true },
   date: { type: String },
-  consultationType: { type: String, required: true },
+  consultationType: { type: String, required: true }, //HealthcareProvider	
+  healthcareProvider: { type: String, required: true },
   officerId: { 
-    required: true,
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Officer' 
 },

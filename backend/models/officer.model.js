@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 
 
 const OfficerSchema = mongoose.Schema({
-  _id: {type : mongoose.Schema.Types.ObjectId},
   name: { type: String, required: true },
   email: { type: String, required: true },
   address: { type: String },

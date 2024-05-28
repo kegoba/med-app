@@ -1,8 +1,9 @@
 
 import Login from './login'
-import AddOfficer from './addOfficer'
+import Register from './register'
 import Home from './home'
-import ConsultationPage from './consultationPage'
+import AddConsultation from "./addConsultation"
+import ViewAllUsers from "./usersList"
 import {  Route, Routes } from 'react-router-dom'
 
 const PageRouter = ()=>{
@@ -11,8 +12,9 @@ const PageRouter = ()=>{
     <Routes>
         <Route  path="/" element={<Home/>} />
         <Route  path="/login" element={<Login/>} />
-        <Route  path="/addofficer" element={<AddOfficer/>} /> 
-        <Route  path="/consultation" element={<ConsultationPage/>} />
+        <Route  path="/register" element={<Register/>} /> 
+        <Route  path="/addconsultation/:id" element={<AddConsultation/>} />
+        <Route  path="/userslist" element={<ViewAllUsers/>} />
     </Routes>
     )
 }

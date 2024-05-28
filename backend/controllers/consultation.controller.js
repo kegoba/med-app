@@ -1,80 +1,112 @@
 const mongoose = require("mongoose");
 const Consultation = require('../models/consultation.model');
-const officer = require('../models/officer.model');
+const Officer = require('../models/officer.model');
 
 
 
-
-const createPatientConsultation =  async (req, res) => {
-    console.log("hi",req.body.officerId)//officerId
-    try {
+//create consultation with user Id or patient Id
+const createConsultation =  async (req, res) => {
+  console.log(req.body)
+      try{
         const consultation = new Consultation({
-            patient: req.body.patient,
-            officerId: req.body.officerId, //officerId
-            date: req.body.date,
-            consultationType: req.body.consultationType,
-            medicalCondition: req.body.medicalCondition,
-            notes: req.body.notes,
-        });
-        const  data = await consultation.save();
-        console.log(data.officerId)
-        res.status(200).json({consultation: data});
+          // healthcareProvider : req.body.healthcareProvider,
+             officerId: req.body.officerId, //officerId
+             date: req.body.date,
+             healthcareProvider : req.body.healthcareProvider,
+             consultationType: req.body.consultationType,
+             medicalCondition: req.body.medicalCondition,
+             notes: req.body.notes,
+         });
+         //const  consultations = await consultation.save();
+         //console.log(consultations.officerId)
+         res.status(200).json({data: consultations});
 
-    } catch(error){
-        res.status(400).json({message: error.errors})
-    }
-
-    
+      }catch(error){
+        res.status(400).json({data: "could not create"});
+      }
     };
 
 
+//get all the consultation associate to all the users
+const getAllUserAndConsultation = async (req, res) => {
+      try {
+        const consultation = await Consultation.find().populate({
+          path: 'officerId',
+          model: 'Officer',
+          match: {}, // optional: filter consultations if needed
+          options: { lean: true }
+        }).lean();
+        if (consultation){
+          // merge to a single array and return 
+          const consultationData = consultation.map((item, index) => ({
+            id: index + 1,
+            _id : item._id ,
+            date: item.date,
+            note : item.note,
+            healthcareProvider: item.healthcareProvider ? item.healthcareProvider : "unkown",
+            consultationType: item.consultationType,
+            medicalCondition: item.medicalCondition,
+            officerId : item.officerId,
+          }));
+          res.status(200).json({data : consultationData});
+        }else{
+        res.status(400).json({data : "no data"});
+        }
+        
+      } catch(error){
+        res.status(400).json({data : "No Record Found"});
+      }
 
-const getAllPatientConsultation = async (req, res) => {
-  const consultations = await Consultation.find()
-  res.send(consultations);
-};
 
+      }
+
+
+    
+// User Get all their Consultation with Id
 const getSinglePatientConsultation = async (req, res) => {
-  const consultation = await Consultation.findById(req.params.id)
-    .populate('officerId');
-  if (!consultation) {
-    return res.status(404).send('Consultation not found');
+  try{
+      const consultation = await Consultation.find({officerId:req.body.officerId})
+      .populate('officerId');
+    if (!consultation) {
+      return res.status(404).send('Consultation not found');
+    }
+    
+      // merge to a single array and return 
+      const consultationData = consultation.map((item, index) => ({
+        id: index + 1,
+        _id : item._id ,
+        date: item.date,
+        note : item.note,
+        healthcareProvider: item.healthcareProvider ? item.healthcareProvider : "unkown",
+        consultationType: item.consultationType,
+        medicalCondition: item.medicalCondition,
+        officerId : item.officerId,
+      }));
+      res.status(200).send({data : consultationData});
+  }catch(error){
+    res.status(400).send({data : "No Record"});
+  };
+    
   }
-  res.send(consultation);
-};
 
-const filterConsultation = async (req, res) => {
-    //const { date, patientName, healthcareProvider, consultationType, medicalCondition } = req.body;
-    //const consultations = await Consultation.find(req.body)
-      //.populate('Officer');
-    //res.send(consultations);
 
+
+//Delete all the Consultation
+const deleteAllConsultation = async (req, res) => {
     const result = await Consultation.deleteMany({});
     res.json({ message: 'All consultations deleted successfully', result });
   };
   
 
-  const  getConsulationByOfficerId = async (req, res) => {
-    
-        const officerId = req.body.officerId;
-          console.log(officerId)
-    
-        const consultations = await Consultation.findOne({officerId: officerId}).populate("officerId");
-        console.log(consultations)
 
-    
-        res.json(consultations);
-    
-    
-  };
   
 
 
 module.exports = {
-    createPatientConsultation,
-    getAllPatientConsultation,
+    createConsultation,
+    getAllUserAndConsultation,
     getSinglePatientConsultation,
-    filterConsultation,
-    getConsulationByOfficerId
+    deleteAllConsultation,
+   
 
 }

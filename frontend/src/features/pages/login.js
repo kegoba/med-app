@@ -1,32 +1,59 @@
 
 import React, { useState } from 'react';
-import axios from 'axios';
+import {Link} from "react-router-dom"
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
-const AddOfficer = () => {
+import { useNavigate } from 'react-router-dom';
+import {loginofficer} from "../services/userServices"
+import {passwordValidation, 
+        emailValidation,
+      } from "../services/validationService"
+
+const Login = () => {
+  const navigate = useNavigate()
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if (!passwordValidation(password)){
+      NotificationManager.error("Password Must Be More Than Four Digits","Invalid Password" );
+      return
+    }
+    if(!emailValidation(email)){
+      NotificationManager.error("Please Enter Valid Email", "Invalid email");
+      return
+    }
     const data ={
       email, password
     }
-    console.log(data)
-    /*const token = localStorage.getItem('token');
-    await axios.post('/api/consultations', {
-      patient, date, type, medicalCondition, notes
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }); */
+    try{
+      const resp  =   await loginofficer(data)
+      console.log(resp.status)
+      if (resp.status==200){
+      navigate("/")
+    }else{
+
+      setEmail("")
+      setPassword("")
+    }
+    
+    }catch(error){
+      setEmail("")
+      setPassword("")
+      console.log(error)
+      NotificationManager.error("wrong password or email", 1000);
+
+    }
   };
 
   
   const handleEmail = (e)=>{
-    setEmail(e.target.value)
+    const emailValue = e.target.value
+    setEmail(emailValue.toLowerCase())
+
     
   }
   const handlePassword = (e)=>{
@@ -40,19 +67,22 @@ const AddOfficer = () => {
     <div className="space-y-6">
         <h5 className="text-xl font-medium text-gray-900 dark:text-white"> Login</h5>
         <div>
-            <input placeholder="Email"  onChange={handleEmail}  type="email"className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+            <input placeholder="Email"  value={email} onChange={handleEmail}  type="email"className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
         </div>
         <div>
-            <input type="password" placeholder="Password" onChange={handlePassword}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+            <input type="password" value={password} placeholder="Password" onChange={handlePassword}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
         </div>
         
-        <button onClick={handleSubmit}  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> Create Officer</button>
-       
+        <button onClick={handleSubmit}  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> Login</button>
+        <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
+            Not registered? <Link to={"/signup"} className="text-blue-700 hover:underline dark:text-blue-500">SignUp</Link>
+        </div>
     </div>
+    <NotificationContainer />
 </div>
     </>
   );
 };
 
-export default AddOfficer;
+export default Login;
 

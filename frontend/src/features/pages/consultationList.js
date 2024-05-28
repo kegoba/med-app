@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import data from "./constation"
+import {BASE_URL} from "../services/userServices"
 
 const ConsultationList = () => {
   const [consultations, setConsultations] = useState([]);
@@ -8,28 +10,29 @@ const ConsultationList = () => {
   useEffect(() => {
     const fetchConsultations = async () => {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/consultations', {
+      const response = await axios.get(BASE_URL+'/getalluserconsultation', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: filters,
+        
       });
-      setConsultations(response.data);
+      setConsultations(response.data.data);
+      console.log(response.data.data)
     };
-
-    fetchConsultations();
+  
+    //fetchConsultations(); 
   }, [filters]);
 
   const handleFilterChange = (e) => {
     setFilters({
       ...filters,
-      [e.target.name]: e.target.value,
+      [e.target.patientName]: e.target.value,
     });
   };
 
   return (
-    <div>
-      <div>
+    <div className='mt-20'>
+      <div >
         <input name="date" type="date" onChange={handleFilterChange} />
         <input name="patientName" placeholder="Patient Name" onChange={handleFilterChange} />
         <input name="healthcareProvider" placeholder="Healthcare Provider" onChange={handleFilterChange} />
@@ -39,7 +42,7 @@ const ConsultationList = () => {
       <ul>
         {consultations.map((consultation) => (
           <li key={consultation._id}>
-            {consultation.date} - {consultation.patient.name} - {consultation.type}
+           <p>  date {consultation.date} -patientname {consultation.patient.name} - type {consultation.type} </p>
           </li>
         ))}
       </ul>

@@ -10,8 +10,9 @@ const  checkEmail = (email) => {
   return data
 }
 
+
+//register user or add Paitent
 const registerOfficer =   async (req, res) => {
-  console.log(req.body)
   if (req.body.password !== ""){
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -19,10 +20,12 @@ const registerOfficer =   async (req, res) => {
       const officer = new Officer({
         name: req.body.name,
         email: req.body.email,
+        phone: req.body.phone,
+        email: req.body.email,
         password: hashedPassword,
         isStaff :  isStaff
       });
-      //await officer.save();
+      await officer.save();
       res.status(200).json({data : officer});
     }
     catch(error){
@@ -38,14 +41,14 @@ const registerOfficer =   async (req, res) => {
   
   }
   
-
+//Login User
 const loginOfficer = async (req, res) => {
   try {
-     
     const officer = await Officer.findOne({ email: req.body.email });
     if (officer) {
       await bcrypt.compare(req.body.password, officer.password, (wrong, correct)=>{
         if (correct){
+          // assign Token to user and save
           const token = jwt.sign({ id: officer._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
           data ={
             token : token,
@@ -57,34 +60,36 @@ const loginOfficer = async (req, res) => {
             res.status(200).json({data : data});
 
         }else {
-          res.status(401).json({ data :  'Invalid Password or Email'});
+          res.status(400).json({ data :  'Invalid Password or Email '});
         }
       })
       
     }else{
-      res.status(401).json({ data :  'Invalid Password or Email'});
+      res.status(401).json({ data :  'Invalid Password'});
     }
 
   }catch(error){
-    res.status(401).json({ data :  error});
+    res.status(400).json({ data :  error});
 
   }
   
 };
 
-const getSingleUser = async (req, res) => {
-  console.log(req.body.officerId)
-  try{
-    const officer = await Officer.findById(req.body.officerId)
-                    .populate("consultationField")
 
-    res.status(200).json({data:officer});
+//get Single user
+const getSingleUser = async (req, res) => {
+  try{
+    const officer = await Officer.findById({_id:req.params.id})//.populate("consultationId")
+
+    res.status(200).json({data : officer});
 
   } catch(error){
-    res.status(401).json({message: error.errors})
+    res.status(400).json({message: error.errors})
   }
   
 };
+
+//get all user
 const getAllUser = async (req, res) => {
   try{
     const officer = await Officer.find()
@@ -97,9 +102,22 @@ const getAllUser = async (req, res) => {
   
 };
 
+const deleteAllUser = async (req, res) => {
+  try{
+       await OfficerdeleteMany({})
+
+    res.status(200).json({data:"all user delted"});
+
+  } catch(error){
+    res.status(401).json({message: error.errors})
+  }
+  
+};
+
 module.exports = {
     registerOfficer,
     loginOfficer,
     getSingleUser,
     getAllUser,
+    deleteAllUser
 };
