@@ -1,18 +1,28 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const { JWT_SECRET } = process.env;
 
 const authenticate = (req, res, next) => {
-  const token = req.header('Authorization')
-  console.log(token)
-  if (!token) {
-    return res.status(401).send('Access denied');
+  const authHeader = req.header('Authorization');
+console.log("process.env.JWT_SECRET")
+  if (!authHeader) {
+    return res.status(401).send('Access denied. No token provided.');
   }
+
+  const token = authHeader.split(' ')[1]; // Extract the token from 'Bearer <token>'
+
+  if (!token) {
+    return res.status(401).send('Access denied. Invalid token format.');
+  }
+   
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);//JWT_SECRET  
     req.officer = decoded;
     next();
   } catch (err) {
-    res.status(400).send('Invalid token');
+    console.error('Token verification failed:', err);
+    res.status(400).send('Invalid token.');
   }
 };
 
-module.exports = authenticate;
+module.exports = authenticate;
