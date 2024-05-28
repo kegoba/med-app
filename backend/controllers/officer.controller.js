@@ -25,8 +25,9 @@ const registerOfficer =   async (req, res) => {
         password: hashedPassword,
         isStaff :  isStaff
       });
-      await officer.save();
-      res.status(200).json({data : officer});
+      
+      const data = await officer.save();
+      res.status(200).json({data : data});
     }
     catch(error){
       res.status(400).json({data : error.message})
@@ -43,11 +44,15 @@ const registerOfficer =   async (req, res) => {
   
 //Login User
 const loginOfficer = async (req, res) => {
+  console.log("step1")
   try {
     const officer = await Officer.findOne({ email: req.body.email });
+    console.log("step2")
     if (officer) {
+      console.log("step3")
       await bcrypt.compare(req.body.password, officer.password, (wrong, correct)=>{
         if (correct){
+          console.log("success")
           // assign Token to user and save
           const token = jwt.sign({ id: officer._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
           data ={

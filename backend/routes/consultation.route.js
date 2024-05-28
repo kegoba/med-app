@@ -9,22 +9,22 @@ const consultationController = require('../controllers/consultation.controller')
 
 
 route.post('/createconsultation', 
-            authenticate, 
+           // authenticate, 
             consultationController.createConsultation
         )
 
 route.get('/getalluserconsultation', 
-            authenticate, 
+             
             consultationController.getAllUserAndConsultation)
 
 
 route.delete('/deletealluserconsultation', 
-                authenticate, 
+                 
                 consultationController.deleteAllConsultation)
 
 
-route.get('/getsingleconsulation'
-        ,authenticate, consultationController.getSinglePatientConsultation)   
+route.post('/getsingleconsulation'
+        , consultationController.getSinglePatientConsultation)   
 
 
 

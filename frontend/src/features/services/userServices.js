@@ -11,7 +11,8 @@ export const getAllConsultation  = async ()=> {
 }
 
 export const getSingleConsulation  = async (data)=> {
-  const response = await axiosInstance.get("/getsingleconsulation",data);
+  console.log(data,"ser")
+  const response = await axiosInstance.post("/getsingleconsulation",data);
 
   return response.data
     
@@ -21,14 +22,14 @@ export const getSingleConsulation  = async (data)=> {
 export const createConsultation  = async (data)=> {
   const response = await axiosInstance.post("/createconsultation",data);
 
-  return response.data
+  return response
     
 }
 
 export const registerUser  = async (data)=> {
   const response = await axiosInstance.post("/registeruser",data);
 
-  return response.data
+  return response
     
 }
 
@@ -37,7 +38,7 @@ export const loginofficer  = async (data)=> {
   if(response.status ===200){
     localStorage.setItem("user", JSON.stringify(response.data.data))
     localStorage.setItem("token", (response.data.data.token))
-    return response.data
+    return response
     
    } 
    return null

@@ -63,6 +63,7 @@ const getAllUserAndConsultation = async (req, res) => {
     
 // User Get all their Consultation with Id
 const getSinglePatientConsultation = async (req, res) => {
+  console.log(req.body)
   try{
       const consultation = await Consultation.find({officerId:req.body.officerId})
       .populate('officerId');
