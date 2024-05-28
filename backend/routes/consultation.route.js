@@ -14,7 +14,7 @@ route.post('/createconsultation',
         )
 
 route.get('/getalluserconsultation', 
-           // authenticate, 
+            authenticate, 
             consultationController.getAllUserAndConsultation)
 
 
@@ -24,8 +24,7 @@ route.delete('/deletealluserconsultation',
 
 
 route.get('/getsingleconsulation'
-                    , 
-                    consultationController.getSinglePatientConsultation)   
+        ,authenticate, consultationController.getSinglePatientConsultation)   
 
 
 

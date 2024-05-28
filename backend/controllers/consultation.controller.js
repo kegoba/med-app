@@ -9,7 +9,6 @@ const createConsultation =  async (req, res) => {
   console.log(req.body)
       try{
         const consultation = new Consultation({
-          // healthcareProvider : req.body.healthcareProvider,
              officerId: req.body.officerId, //officerId
              date: req.body.date,
              healthcareProvider : req.body.healthcareProvider,
@@ -17,7 +16,7 @@ const createConsultation =  async (req, res) => {
              medicalCondition: req.body.medicalCondition,
              notes: req.body.notes,
          });
-         //const  consultations = await consultation.save();
+         const  consultations = await consultation.save();
          //console.log(consultations.officerId)
          res.status(200).json({data: consultations});
 
