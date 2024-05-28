@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 const Consultation = require('../models/consultation.model');
-const Officer = require('../models/officer.model');
 
 
 
 //create consultation with user Id or patient Id
 const createConsultation =  async (req, res) => {
-  console.log(req.body)
       try{
         const consultation = new Consultation({
              officerId: req.body.officerId, //officerId
