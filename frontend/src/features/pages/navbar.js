@@ -38,7 +38,7 @@ const Navbar = () => {
          <Link  to="/" className='text-3xl font-bold mr-4 sm:text-4xl'>  <img  src={medlogo}className='h-12 w-17' />  </Link>
           <ul className='hidden md:flex'>
           <li><Link className=' p-4' to="/"  >Home</Link></li>
-          {checkUser ? (<li><Link className=' p-4' to="/userslist" >ALL users </Link> </li>):(<div> ALL users</div>) } 
+          <li><Link className=' p-4' to="/userslist" >ALL users </Link> </li>
           </ul>
         </div>
         <div className='hidden md:flex pr-4'>

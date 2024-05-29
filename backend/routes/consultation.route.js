@@ -15,17 +15,22 @@ route.post('/createconsultation',
 
 route.get('/getalluserconsultation', 
               authenticate,
-            consultationController.getAllUserAndConsultation)
-            authenticate,
+            consultationController.getAllUserAndConsultation
+        )
+            
+
 
 route.delete('/deletealluserconsultation', 
         authenticate,  
-                consultationController.deleteAllConsultation)
+                consultationController.deleteAllConsultation
+        )
+
 
 
 route.post('/getsingleconsulation',
      authenticate,
-         consultationController.getSinglePatientConsultation)   
+         consultationController.getSinglePatientConsultation
+        )   
 
 
 
